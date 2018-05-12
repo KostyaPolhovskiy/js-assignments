@@ -272,7 +272,7 @@ function getSecondItems(arr) {
  *  [ 1,2,3,4,5 ] => [ 1, 2,2, 3,3,3, 4,4,4,4, 5,5,5,5,5 ]
  */
 function propagateItemsByPositionIndex(arr) {
-    throw new Error('Not implemented');
+    return arr.map((value, index) => new Array(++index).fill(value)).reduce((pred, cur) => pred.concat(cur), []);
 }
 
 
@@ -479,7 +479,7 @@ function getIntervalArray(start, end) {
  *   [ 1, 1, 2, 2, 3, 3, 4, 4] => [ 1, 2, 3, 4]
  */
 function distinct(arr) {
-   throw new Error('Not implemented');
+    return arr.filter((value, index) => index == arr.indexOf(value));
 }
 
 /**
@@ -513,7 +513,13 @@ function distinct(arr) {
  *   }
  */
 function group(array, keySelector, valueSelector) {
-   throw new Error('Not implemented');
+    var myMap = new Map();
+    array.map(function(value){
+        if (!myMap.has(keySelector(value))){
+            myMap.set(keySelector(value), array.filter(val => keySelector(value) == keySelector(val)).map(val2 => valueSelector(val2)));
+        }
+    }); 
+    return myMap;
 }
 
 /**
@@ -529,7 +535,9 @@ function group(array, keySelector, valueSelector) {
  *   ['one','two','three'], x=>x.split('')  =>   ['o','n','e','t','w','o','t','h','r','e','e']
  */
 function selectMany(arr, childrenSelector) {
-    throw new Error('Not implemented');
+    var resultArr = [];
+    arr.map(x => resultArr = resultArr.concat(childrenSelector(x)));
+    return resultArr;
 }
 
 /**
@@ -546,7 +554,8 @@ function selectMany(arr, childrenSelector) {
  *   [[[ 1, 2, 3]]], [ 0, 0, 1 ]      => 2        (arr[0][0][1])
  */
 function getElementByIndexes(arr, indexes) {
-    throw new Error('Not implemented');
+    indexes.map(elem => arr = arr[elem]);
+    return arr;
 }
 
 
@@ -569,7 +578,16 @@ function getElementByIndexes(arr, indexes) {
  *
  */
 function swapHeadAndTail(arr) {
-    throw new Error('Not implemented');
+    let len = arr.length;
+    let head = arr.slice(0, len / 2);
+    if (len % 2 == 0) {
+        let tail = arr.slice(len / 2);
+        return tail.concat(head);
+    } else {
+        let center = arr.slice(len / 2, len / 2 + 1);
+        let tail = arr.slice(len / 2 + 1);
+        return tail.concat(center).concat(head);
+    }
 }
 
 
@@ -605,4 +623,4 @@ module.exports = {
     selectMany: selectMany,
     getElementByIndexes: getElementByIndexes,
     swapHeadAndTail: swapHeadAndTail
-};
+}
