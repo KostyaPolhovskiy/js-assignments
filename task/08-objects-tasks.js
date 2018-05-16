@@ -63,8 +63,13 @@ function getJSON(obj) {
  *
  */
 function fromJSON(proto, json) {
-    return Object.assign(new proto.constructor(), JSON.parse(json));
-    
+    let jsonObj = JSON.parse(json);
+    let obj = Object.create(proto);
+    for (let field in proto.prototype)
+        obj[field] = proto[field];
+    for (let field in jsonObj)
+        obj[field] = jsonObj[field]
+return Object.setPrototypeOf(jsonObj, proto);
 }
 
 
